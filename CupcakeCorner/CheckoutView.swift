@@ -55,14 +55,14 @@ struct CheckoutView: View {
         let url  = URL(string: "https://reqres.in/api/cupcakes")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        //request.httpMethod = "POST"
+        request.httpMethod = "POST"
         
         do {
             let (data, _) = try await URLSession.shared.upload(for: request, from: encoded)
             
             let decodedOrder = try JSONDecoder().decode(Order.self, from: data)
             alertTitle = "Thank you!"
-            confirmationMessage = "Your order for \(decodedOrder.quantity)x \(Order.types[decodedOrder.type].lowercased()) cupcakes is on its way!"
+            confirmationMessage = "Your order for \(decodedOrder.orderData.quantity)x \(OrderData.types[decodedOrder.orderData.type].lowercased()) cupcakes is on its way!"
         } catch {
             print("Checkout failed.")
             alertTitle = "Error"
